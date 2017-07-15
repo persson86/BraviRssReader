@@ -6,16 +6,18 @@ import com.mobile.persson.bravirssreader.repository.FeedRepository
 import io.reactivex.disposables.Disposable
 
 
-class FeedsLiveData(repository: FeedRepository) : MediatorLiveData<Pair<Feed?, Throwable?>>() {
+class FeedLiveData : MediatorLiveData<Pair<Feed?, Throwable?>>() {
 
     private var disposable: Disposable? = null
 
-    init {
-        disposable = repository
-                .getRss("http://feed.androidauthority.com/")
-                .subscribe { data, error -> this@FeedsLiveData.value = Pair(data, error) }
-    }
-
+    var feedUrl: String? = null
+        set(value) {
+            value?.let {
+                disposable = FeedRepository()
+                        .getRss(it)
+                        .subscribe { data, error -> this@FeedLiveData.value = Pair(data, error) }
+            }
+        }
 
     override fun onInactive() {
         super.onInactive()

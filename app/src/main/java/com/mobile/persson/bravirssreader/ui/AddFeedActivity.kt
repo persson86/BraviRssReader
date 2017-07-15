@@ -14,7 +14,7 @@ class AddFeedActivity : BaseLifecycleActivity<FeedsViewModel>() {
         setContentView(R.layout.activity_add_feed)
 
         button.setOnClickListener { view ->
-            viewModel.setUrl(etUrl.text.toString())
+            viewModel.addUrl(etUrl.text.toString())
         }
     }
 }
