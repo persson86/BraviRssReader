@@ -24,4 +24,8 @@ open class FeedsViewModel(application: Application?) : AndroidViewModel(applicat
             it?.first?.let { feedsLiveData.value = it }
         }
     }
+
+    fun setUrl(url: String) {
+        repository.addUrl(url)
+    }
 }

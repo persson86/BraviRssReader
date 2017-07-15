@@ -36,6 +36,8 @@ class FeedsAdapter : RecyclerView.Adapter<FeedsAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(item: FeedItem, position: Int) = with(itemView) {
             tvTitle.text = item.title
+            tvDate.text = item.pubDate
+            tvDesc.text = item.description
 
             itemView.setOnClickListener { Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show() }
         }

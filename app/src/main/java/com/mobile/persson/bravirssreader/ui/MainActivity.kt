@@ -14,6 +14,8 @@ import com.mobile.persson.bravirssreader.base.BaseLifecycleActivity
 import com.mobile.persson.bravirssreader.data.model.Feed
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.content.Intent
+import io.realm.Realm
 
 class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -27,21 +29,10 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        Realm.init(applicationContext)
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        nav_view.setNavigationItemSelectedListener(this)
-
-        rv.setHasFixedSize(true)
-        rv.adapter = adapter
-
+        configNavigationDrawer()
+        configAdapter()
         observeLiveData()
     }
 
@@ -68,7 +59,7 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_camera -> {
-                // Handle the camera action
+                addUrl()
             }
             R.id.nav_gallery -> {
 
@@ -91,6 +82,20 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
         return true
     }
 
+    private fun configNavigationDrawer() {
+        val toggle = ActionBarDrawerToggle(
+                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        nav_view.setNavigationItemSelectedListener(this)
+    }
+
+    private fun configAdapter() {
+        rv.setHasFixedSize(true)
+        rv.adapter = adapter
+    }
+
     private fun observeLiveData() {
         viewModel.feedsLiveData.observe(this, Observer<Feed> {
             it?.let { adapter.addFeeds(it.channel?.feedItems) }
@@ -99,5 +104,11 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
             it?.let { Snackbar.make(rv, it.localizedMessage, Snackbar.LENGTH_LONG).show() }
         })
     }
+
+    private fun addUrl() {
+        val intent = Intent(this, AddFeedActivity::class.java)
+        startActivity(intent)
+    }
+
 }
 
