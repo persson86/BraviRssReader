@@ -3,6 +3,7 @@ package com.mobile.persson.bravirssreader.repository
 import android.util.Log
 import com.mobile.persson.bravirssreader.data.RemoteData
 import com.mobile.persson.bravirssreader.data.LocalData
+import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.Feed
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -10,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 
 class FeedRepository : RepositoryData {
     private val remoteData = RemoteData.Factory.create()
+    private val localData = LocalData()
 
     override fun getRss(url: String): Single<Feed>
             = remoteData
@@ -25,11 +27,13 @@ class FeedRepository : RepositoryData {
 
 
     override fun addUrl(url: String) {
-        val feedDao: LocalData = LocalData()
         if (!url.isEmpty()) {
-            feedDao.addUrl(url)
+            localData.addUrl(url)
         }
     }
+
+    override fun getUrls(): List<FeedUrlEntity>
+            = localData.getUrls()
 }
 
 /*

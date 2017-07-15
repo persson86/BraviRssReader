@@ -15,6 +15,7 @@ import com.mobile.persson.bravirssreader.data.model.Feed
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.content.Intent
+import android.widget.Toast
 import io.realm.Realm
 
 class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +35,11 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
         configNavigationDrawer()
         configAdapter()
         observeLiveData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        configItemUrlsNavigation()
     }
 
     override fun onBackPressed() {
@@ -58,23 +64,11 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_camera -> {
+            R.id.nav_add_url -> {
                 addUrl()
             }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+            else -> {
+                Toast.makeText(this, item.itemId.toString(), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -89,6 +83,17 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+    }
+
+    private fun configItemUrlsNavigation() {
+        val urlList = viewModel.getUrls()
+
+        var i = 0
+        for (item in urlList) {
+            i++
+            nav_view.menu.removeItem(i)
+            nav_view.menu.add(i, i, i, item.url)
+        }
     }
 
     private fun configAdapter() {
