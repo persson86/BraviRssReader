@@ -17,14 +17,11 @@ class FeedRepository : RepositoryData {
             = remoteData
             .getRss(url)
             .doOnSuccess {
-                Log.v("LFSP", "GET OK")
-            }
+                localData.addFeeds(it.channel?.feedItems!!) }
             .doOnError {
-                Log.v("LFSP", "GET NOK")
-            }
+                Log.v("LFSP", "GET NOK") }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-
 
     override fun addUrl(url: String) {
         if (!url.isEmpty()) {
@@ -34,13 +31,5 @@ class FeedRepository : RepositoryData {
 
     override fun getUrls(): List<FeedUrlEntity>
             = localData.getUrls()
+
 }
-
-/*
-        val feed: Feed = Feed()
-val list: MutableList<FeedItem> = mutableListOf()
-val item: FeedItem = FeedItem()
-item.title = "teste"
-list.add(item)
-
-feed.channel?.feedItems = list*/

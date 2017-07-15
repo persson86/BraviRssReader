@@ -9,5 +9,4 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Add new Feed" />
     </group>
-
 </menu>

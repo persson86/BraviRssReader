@@ -9,7 +9,7 @@ import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.data.model.FeedItem
 import kotlinx.android.synthetic.main.view_item.view.*
 
-class FeedsAdapter : RecyclerView.Adapter<FeedsAdapter.ViewHolder>() {
+class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
 
     private var feeds: List<FeedItem> = ArrayList()
 

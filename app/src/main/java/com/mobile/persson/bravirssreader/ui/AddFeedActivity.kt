@@ -1,13 +1,14 @@
 package com.mobile.persson.bravirssreader.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.base.BaseLifecycleActivity
 import kotlinx.android.synthetic.main.activity_add_feed.*
 
-class AddFeedActivity : BaseLifecycleActivity<FeedsViewModel>() {
+class AddFeedActivity : BaseLifecycleActivity<FeedViewModel>() {
 
-    override val viewModelClass = FeedsViewModel::class.java
+    override val viewModelClass = FeedViewModel::class.java
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,6 +16,8 @@ class AddFeedActivity : BaseLifecycleActivity<FeedsViewModel>() {
 
         button.setOnClickListener { view ->
             viewModel.addUrl(etUrl.text.toString())
+            Toast.makeText(this, "Feed/ Url add com sucesso", Toast.LENGTH_LONG).show()
+            finish()
         }
     }
 }

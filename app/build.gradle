@@ -62,4 +62,7 @@ dependencies {
     // rx
     implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.rxVersion
 
+    compile 'com.github.vicpinm:krealmextensions:1.0.4'
+
+
 }

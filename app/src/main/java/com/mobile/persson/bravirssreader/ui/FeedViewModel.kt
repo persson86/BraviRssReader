@@ -8,7 +8,7 @@ import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.Feed
 import com.mobile.persson.bravirssreader.repository.FeedRepository
 
-open class FeedsViewModel(application: Application?) : AndroidViewModel(application) {
+open class FeedViewModel(application: Application?) : AndroidViewModel(application) {
 
     private val feedLiveData = MutableLiveData<String>()
     private val repository = FeedRepository()

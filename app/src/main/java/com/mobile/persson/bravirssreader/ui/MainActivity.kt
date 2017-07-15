@@ -15,16 +15,17 @@ import com.mobile.persson.bravirssreader.data.model.Feed
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.content.Intent
-import android.widget.Toast
+import com.mobile.persson.bravirssreader.data.LocalData
 import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
+import com.mobile.persson.bravirssreader.repository.FeedRepository
 import io.realm.Realm
 
-class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNavigationItemSelectedListener {
 
-    override val viewModelClass = FeedsViewModel::class.java
+    override val viewModelClass = FeedViewModel::class.java
 
     private val rv by lazy { findViewById(R.id.rv) as RecyclerView }
-    private val adapter = FeedsAdapter()
+    private val adapter = FeedAdapter()
     private var urlList: List<FeedUrlEntity> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +71,6 @@ class MainActivity : BaseLifecycleActivity<FeedsViewModel>(), NavigationView.OnN
                 addUrl()
             }
             else -> {
-                Toast.makeText(this, item.itemId.toString(), Toast.LENGTH_SHORT).show()
                 viewModel.getFeed(item.title.toString())
             }
         }
