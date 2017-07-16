@@ -6,28 +6,31 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
 import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.base.BaseLifecycleActivity
 import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.Feed
+import com.mobile.persson.bravirssreader.unsafeLazy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNavigationItemSelectedListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     override val viewModelClass = FeedViewModel::class.java
 
     private val rv by lazy { findViewById(R.id.rv) as RecyclerView }
     private val adapter = FeedAdapter(this)
     private var urlList: List<FeedUrlEntity> = ArrayList()
+    private val vRefresh by unsafeLazy { findViewById(R.id.lRefresh) as SwipeRefreshLayout }
+    private var selectedUrlFeed: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,8 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         setSupportActionBar(toolbar)
 
         Realm.init(applicationContext)
+
+        vRefresh.setOnRefreshListener(this)
 
         configNavigationDrawer()
         configAdapter()
@@ -73,6 +78,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
             }
             else -> {
                 viewModel.getFeed(item.title.toString())
+                selectedUrlFeed = item.title.toString()
             }
         }
 
@@ -106,6 +112,9 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     }
 
     private fun observeLiveData() {
+        viewModel.isLoadingLiveData.observe(this, Observer<Boolean> {
+            it?.let { vRefresh.isRefreshing = it }
+        })
         viewModel.feedsLiveData.observe(this, Observer<Feed> {
             it?.let { adapter.addFeeds(it.channel?.feedItems) }
         })
@@ -119,9 +128,12 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         startActivity(intent)
     }
 
-    private fun addUrl2(string: Int) {
-        val intent = Intent(this, AddFeedActivity::class.java)
-        startActivity(intent)
+    override fun onRefresh() {
+        if (selectedUrlFeed != null) {
+            viewModel.getFeed(selectedUrlFeed!!)
+        } else {
+            vRefresh.isRefreshing = false
+        }
     }
 
 }

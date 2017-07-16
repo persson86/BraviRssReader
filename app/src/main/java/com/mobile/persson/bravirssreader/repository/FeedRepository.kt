@@ -18,7 +18,7 @@ class FeedRepository : RepositoryData {
             .getRss(url)
             .doOnSuccess {
                 Log.v("LFSP", "GET OK")
-                //localData.addFeeds(it.channel?.feedItems!!, url)
+                localData.addFeeds(it.channel?.feedItems!!, url)
             }
             .doOnError {
                 Log.v("LFSP", "GET NOK")
