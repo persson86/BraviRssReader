@@ -5,6 +5,7 @@ import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.FeedItem
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.Sort
 
 
 class LocalData {
@@ -39,7 +40,7 @@ class LocalData {
         realm.commitTransaction()
     }
 
-    fun getRss(url: String): RealmResults<FeedItemEntity>
-            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll()
+    fun getRss(): List<FeedItemEntity>
+            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll().sort("pubDate", Sort.DESCENDING)
 
 }

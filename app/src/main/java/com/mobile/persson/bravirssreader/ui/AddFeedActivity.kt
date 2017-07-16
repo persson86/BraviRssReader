@@ -15,7 +15,11 @@ class AddFeedActivity : BaseLifecycleActivity<FeedViewModel>() {
         setContentView(R.layout.activity_add_feed)
 
         button.setOnClickListener { view ->
-            viewModel.addUrl(etUrl.text.toString())
+
+            var feedUrl: String = "http://"
+            feedUrl = feedUrl.plus(etUrl.text.toString())
+
+            viewModel.addUrl(feedUrl)
             Toast.makeText(this, "Feed/ Url add com sucesso", Toast.LENGTH_LONG).show()
             finish()
         }

@@ -13,8 +13,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.base.BaseLifecycleActivity
+import com.mobile.persson.bravirssreader.data.LocalData
 import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.Feed
+import com.mobile.persson.bravirssreader.data.model.FeedItem
 import com.mobile.persson.bravirssreader.unsafeLazy
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,6 +42,21 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         Realm.init(applicationContext)
 
         vRefresh.setOnRefreshListener(this)
+
+        val localFeeds = LocalData().getRss()
+        if (localFeeds.size > 0) {
+            val feeds: MutableList<FeedItem> = mutableListOf()
+            for (item in localFeeds) {
+                val feed = FeedItem()
+                feed.title = item.title
+                feed.description = item.description
+                feed.pubDate = item.pubDate
+                feed.rss = item.rss
+                feeds.add(feed)
+            }
+
+            adapter.addFeeds(feeds)
+        }
 
         configNavigationDrawer()
         configAdapter()

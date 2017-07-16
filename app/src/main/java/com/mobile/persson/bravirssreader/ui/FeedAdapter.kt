@@ -42,6 +42,10 @@ class FeedAdapter(context: Context) : RecyclerView.Adapter<FeedAdapter.ViewHolde
             tvTitle.text = item.title
             tvDate.text = item.pubDate
             tvDesc.text = item.description
+
+            if (item.rss != "")
+                tvRss.text = item.rss
+
             itemView.setOnClickListener {
                 val intent = Intent(context, FeedDetailActivity::class.java)
                 intent.putExtra("link", item.link)

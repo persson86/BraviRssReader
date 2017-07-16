@@ -15,5 +15,7 @@ class FeedItem(
         var link: String? = null,
 
         @field:Element(name = "description")
-        var description: String? = null
+        var description: String? = null,
+
+        var rss: String? = null
 )
