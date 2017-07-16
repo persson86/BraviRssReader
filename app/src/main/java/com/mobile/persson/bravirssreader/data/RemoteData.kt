@@ -16,7 +16,7 @@ interface RemoteData {
             val retrofit = retrofit2.Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(SimpleXmlConverterFactory.create())
-                    .baseUrl("http://www.androidauthority.com/")
+                    .baseUrl("http://www.bravi.com.br/")
                     .build()
 
             return retrofit.create(RemoteData::class.java)

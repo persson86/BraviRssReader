@@ -1,8 +1,6 @@
 package com.mobile.persson.bravirssreader.data
 
-import com.mobile.persson.bravirssreader.data.db.entity.FeedItemEntity
 import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
-import com.mobile.persson.bravirssreader.data.model.FeedItem
 import io.realm.Realm
 import io.realm.RealmResults
 
@@ -21,7 +19,7 @@ class LocalData {
             = Realm.getDefaultInstance().where(FeedUrlEntity::class.java).findAll()
 
 
-    fun addFeeds(model: List<FeedItem>) {
+    /*fun addFeeds(model: List<FeedItem>, url: String) {
         val feeds: MutableList<FeedItemEntity> = mutableListOf()
         for (feedReponse in model) {
             val feedItem = FeedItemEntity()
@@ -29,6 +27,7 @@ class LocalData {
             feedItem.description = feedReponse.description
             feedItem.link = feedReponse.link
             feedItem.pubDate = feedReponse.pubDate
+            feedItem.rss = url
             feeds.add(feedItem)
         }
 
@@ -36,10 +35,9 @@ class LocalData {
         realm.beginTransaction()
         realm.copyToRealm(feeds)
         realm.commitTransaction()
-    }
+    }*/
 
-    fun getRss(url: String): RealmResults<FeedItemEntity>
-            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll()
-
+/*    fun getRss(url: String): RealmResults<FeedItemEntity>
+            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll()*/
 
 }

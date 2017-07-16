@@ -1,31 +1,32 @@
 package com.mobile.persson.bravirssreader.ui
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.base.BaseLifecycleActivity
+import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.Feed
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import android.content.Intent
-import com.mobile.persson.bravirssreader.data.LocalData
-import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
-import com.mobile.persson.bravirssreader.repository.FeedRepository
-import io.realm.Realm
+
 
 class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNavigationItemSelectedListener {
 
     override val viewModelClass = FeedViewModel::class.java
 
     private val rv by lazy { findViewById(R.id.rv) as RecyclerView }
-    private val adapter = FeedAdapter()
+    private val adapter = FeedAdapter(this)
     private var urlList: List<FeedUrlEntity> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +115,11 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     }
 
     private fun addUrl() {
+        val intent = Intent(this, AddFeedActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun addUrl2(string: Int) {
         val intent = Intent(this, AddFeedActivity::class.java)
         startActivity(intent)
     }

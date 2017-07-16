@@ -1,17 +1,20 @@
 package com.mobile.persson.bravirssreader.ui
 
+import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.data.model.FeedItem
 import kotlinx.android.synthetic.main.view_item.view.*
 
-class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
+
+class FeedAdapter(context: Context) : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
 
     private var feeds: List<FeedItem> = ArrayList()
+    private var context: Context? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(feeds[position], position)
@@ -23,6 +26,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val root = (LayoutInflater.from(parent?.context).inflate(R.layout.view_item, parent, false))
+        context = context
         return ViewHolder(root)
     }
 
@@ -38,8 +42,11 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.ViewHolder>() {
             tvTitle.text = item.title
             tvDate.text = item.pubDate
             tvDesc.text = item.description
-
-            itemView.setOnClickListener { Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show() }
+            itemView.setOnClickListener {
+                val intent = Intent(context, FeedDetailActivity::class.java)
+                intent.putExtra("link", item.link)
+                context.startActivity(intent)
+            }
         }
     }
 }

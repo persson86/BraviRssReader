@@ -4,5 +4,4 @@ import io.realm.RealmObject
 
 open class FeedUrlEntity : RealmObject() {
     open var url: String? = null
-    //open var id: Int? = null
 }
