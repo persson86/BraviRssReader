@@ -42,6 +42,6 @@ class LocalData {
     }
 
     fun getRss(): List<FeedItemEntity>
-            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll()
+            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll() //TODO .sort("pubDate", Sort.DESCENDING)
 
 }

@@ -21,8 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AddFeedActivity" />
-        <activity android:name=".ui.FeedDetailActivity" />
+        <activity
+            android:name=".ui.AddFeedActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.FeedDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

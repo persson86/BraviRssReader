@@ -1,5 +1,6 @@
 package com.mobile.persson.bravirssreader.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -43,13 +44,16 @@ class FeedAdapter(context: Context) : RecyclerView.Adapter<FeedAdapter.ViewHolde
             tvDate.text = item.pubDate
             tvDesc.text = item.description
 
-            if (item.rss != "")
+            if (item.rss != "") {
                 tvRss.text = item.rss
+            }
 
             itemView.setOnClickListener {
                 val intent = Intent(context, FeedDetailActivity::class.java)
                 intent.putExtra("link", item.link)
                 context.startActivity(intent)
+                val activity = context as Activity
+                activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         }
     }

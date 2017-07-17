@@ -22,7 +22,6 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-
 class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNavigationItemSelectedListener,
         SwipeRefreshLayout.OnRefreshListener {
 
@@ -33,11 +32,14 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     private var urlList: List<FeedUrlEntity> = ArrayList()
     private val vRefresh by unsafeLazy { findViewById(R.id.lRefresh) as SwipeRefreshLayout }
     private var selectedUrlFeed: String? = null
+    private var isNewFeed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        this.title = "Saved Feeds"
 
         Realm.init(applicationContext)
 
@@ -52,6 +54,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     override fun onResume() {
         super.onResume()
         configItemUrlsNavigation()
+        loadNewFeedIfIsNeeded()
     }
 
     override fun onBackPressed() {
@@ -79,20 +82,34 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
             R.id.nav_add_url -> {
                 nav_view.menu.getItem(1).isCheckable = false
                 addUrl()
+                isNewFeed = true
             }
             R.id.nav_local_feed -> {
+                this.title = "Saved Feeds"
                 nav_view.menu.getItem(0).isChecked = true
                 showLocalFeeds()
             }
             else -> {
+                val title = item.title.toString()
+                this.title = title
                 nav_view.menu.getItem(0).isChecked = false
-                viewModel.getFeed(item.title.toString())
-                selectedUrlFeed = item.title.toString()
+                var feedUrl: String = "http://"
+                feedUrl = feedUrl.plus(title)
+                viewModel.getFeed(feedUrl)
+                selectedUrlFeed = feedUrl
             }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onRefresh() {
+        if (selectedUrlFeed != null) {
+            viewModel.getFeed(selectedUrlFeed!!)
+        } else {
+            vRefresh.isRefreshing = false
+        }
     }
 
     private fun configNavigationDrawer() {
@@ -111,7 +128,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         for (item in urlList) {
             i++
             nav_view.menu.removeItem(i)
-            nav_view.menu.add(i, i, i, item.url)
+            nav_view.menu.add(i, i, i, item.url!!.substring(7))
         }
     }
 
@@ -131,8 +148,13 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
                 adapter.addFeeds(it.channel?.feedItems)
             }
         })
+
         viewModel.throwableLiveData.observe(this, Observer<Throwable> {
-            it?.let { Snackbar.make(rv, it.localizedMessage, Snackbar.LENGTH_LONG).show() }
+            it?.let {
+                val feeds: MutableList<FeedItem> = mutableListOf()
+                adapter.addFeeds(feeds)
+                Snackbar.make(rv, it.localizedMessage, Snackbar.LENGTH_LONG).show()
+            }
         })
     }
 
@@ -161,15 +183,19 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     private fun addUrl() {
         val intent = Intent(this, AddFeedActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
     }
 
-    override fun onRefresh() {
-        if (selectedUrlFeed != null) {
-            viewModel.getFeed(selectedUrlFeed!!)
-        } else {
-            vRefresh.isRefreshing = false
+    private fun loadNewFeedIfIsNeeded() {
+        if (isNewFeed) {
+            val size: Int = urlList.size - 1
+            val url: String = urlList.get(size).url!!
+            viewModel.getFeed(url)
+            selectedUrlFeed = url
+            val title = url.substring(7)
+            this.title = title
+            isNewFeed = false
         }
     }
-
 }
 
