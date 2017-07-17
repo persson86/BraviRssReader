@@ -46,7 +46,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         configNavigationDrawer()
         configAdapter()
         observeLiveData()
-        showLocalData()
+        showLocalFeeds()
     }
 
     override fun onResume() {
@@ -77,9 +77,15 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_add_url -> {
+                nav_view.menu.getItem(1).isCheckable = false
                 addUrl()
             }
+            R.id.nav_local_feed -> {
+                nav_view.menu.getItem(0).isChecked = true
+                showLocalFeeds()
+            }
             else -> {
+                nav_view.menu.getItem(0).isChecked = false
                 viewModel.getFeed(item.title.toString())
                 selectedUrlFeed = item.title.toString()
             }
@@ -130,7 +136,8 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         })
     }
 
-    private fun showLocalData() {
+    private fun showLocalFeeds() {
+        nav_view.menu.getItem(0).isChecked = true
         val localFeeds = LocalData().getRss()
         if (localFeeds.isNotEmpty()) {
 

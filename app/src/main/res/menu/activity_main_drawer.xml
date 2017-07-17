@@ -5,8 +5,12 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_local_feed"
+            android:icon="@drawable/ic_local"
+            android:title="Saved Feeds" />
+        <item
             android:id="@+id/nav_add_url"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_feed"
             android:title="Add new Feed" />
     </group>
 </menu>
