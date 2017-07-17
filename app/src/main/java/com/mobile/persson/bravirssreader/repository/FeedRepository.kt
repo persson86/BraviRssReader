@@ -1,6 +1,5 @@
 package com.mobile.persson.bravirssreader.repository
 
-import android.util.Log
 import com.mobile.persson.bravirssreader.data.LocalData
 import com.mobile.persson.bravirssreader.data.RemoteData
 import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
@@ -16,13 +15,7 @@ class FeedRepository : RepositoryData {
     override fun getRss(url: String): Single<Feed>
             = remoteData
             .getRss(url)
-            .doOnSuccess {
-                Log.v("LFSP", "GET OK")
-                localData.addFeeds(it.channel?.feedItems!!, url)
-            }
-            .doOnError {
-                Log.v("LFSP", "GET NOK")
-            }
+            .doOnSuccess { localData.addFeeds(it.channel?.feedItems!!, url) }
             .subscribeOn(io.reactivex.schedulers.Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 

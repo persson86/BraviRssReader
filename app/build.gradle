@@ -59,15 +59,11 @@ dependencies {
     }
     implementation 'com.google.code.gson:gson:2.8.0'
 
-    compile 'com.squareup.okhttp3:okhttp:3.8.0'
-    compile 'com.jakewharton.retrofit:retrofit1-okhttp3-client:1.0.2'
-    compile "com.squareup.okhttp3:logging-interceptor:3.8.0"
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation 'com.jakewharton.retrofit:retrofit1-okhttp3-client:1.0.2'
+    implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
 
     // rx
     implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.rxVersion
 
-    compile 'com.github.vicpinm:krealmextensions:1.0.4'
-
-
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }

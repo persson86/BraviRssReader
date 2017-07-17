@@ -18,7 +18,6 @@ import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.Feed
 import com.mobile.persson.bravirssreader.data.model.FeedItem
 import com.mobile.persson.bravirssreader.unsafeLazy
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -30,7 +29,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     private val rv by lazy { findViewById(R.id.rv) as RecyclerView }
     private val adapter = FeedAdapter(this)
     private var urlList: List<FeedUrlEntity> = ArrayList()
-    private val vRefresh by unsafeLazy { findViewById(R.id.lRefresh) as SwipeRefreshLayout }
+    private val lRefresh by unsafeLazy { findViewById(R.id.lRefresh) as SwipeRefreshLayout }
     private var selectedUrlFeed: String? = null
     private var isNewFeed = false
 
@@ -38,13 +37,10 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        this.title = "Saved Feeds"
-
-        vRefresh.setOnRefreshListener(this)
+        this.title = getString(R.string.string_saved_feeds)
 
         configNavigationDrawer()
-        configAdapter()
+        configViews()
         observeLiveData()
         showLocalFeeds()
     }
@@ -83,7 +79,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
                 isNewFeed = true
             }
             R.id.nav_local_feed -> {
-                this.title = "Saved Feeds"
+                this.title = getString(R.string.string_saved_feeds)
                 nav_view.menu.getItem(0).isChecked = true
                 showLocalFeeds()
             }
@@ -91,7 +87,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
                 val title = item.title.toString()
                 this.title = title
                 nav_view.menu.getItem(0).isChecked = false
-                var feedUrl: String = "http://"
+                var feedUrl: String = getString(R.string.string_http)
                 feedUrl = feedUrl.plus(title)
                 viewModel.getFeed(feedUrl)
                 selectedUrlFeed = feedUrl
@@ -106,7 +102,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         if (selectedUrlFeed != null) {
             viewModel.getFeed(selectedUrlFeed!!)
         } else {
-            vRefresh.isRefreshing = false
+            lRefresh.isRefreshing = false
         }
     }
 
@@ -130,19 +126,20 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         }
     }
 
-    private fun configAdapter() {
+    private fun configViews() {
+        lRefresh.setOnRefreshListener(this)
         rv.setHasFixedSize(true)
         rv.adapter = adapter
     }
 
     private fun observeLiveData() {
         viewModel.isLoadingLiveData.observe(this, Observer<Boolean> {
-            it?.let { vRefresh.isRefreshing = it }
+            it?.let { lRefresh.isRefreshing = it }
         })
 
         viewModel.feedsLiveData.observe(this, Observer<Feed> {
             it?.let {
-                vRefresh.isEnabled = true
+                lRefresh.isEnabled = true
                 adapter.addFeeds(it.channel?.feedItems)
             }
         })
@@ -161,7 +158,7 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         val localFeeds = LocalData().getRss()
         if (localFeeds.isNotEmpty()) {
 
-            vRefresh.isEnabled = false
+            lRefresh.isEnabled = false
 
             val feeds: MutableList<FeedItem> = mutableListOf()
             for (item in localFeeds) {
@@ -181,18 +178,19 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     private fun addUrl() {
         val intent = Intent(this, AddFeedActivity::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
     }
 
     private fun loadNewFeedIfIsNeeded() {
         if (isNewFeed) {
             val size: Int = urlList.size - 1
-            val url: String = urlList.get(size).url!!
+            val url: String = urlList[(size)].url!!
             viewModel.getFeed(url)
             selectedUrlFeed = url
             val title = url.substring(7)
             this.title = title
             isNewFeed = false
+            nav_view.menu.getItem(0).isChecked = false
         }
     }
 }

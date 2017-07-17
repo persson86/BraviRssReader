@@ -7,7 +7,6 @@ open class FeedItemEntity : RealmObject() {
 
     @PrimaryKey
     var title: String? = null
-
     var pubDate: String? = null
     var link: String? = null
     var description: String? = null

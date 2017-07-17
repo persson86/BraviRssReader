@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.mobile.persson.bravirssreader.R
 import com.mobile.persson.bravirssreader.base.BaseLifecycleActivity
 import kotlinx.android.synthetic.main.activity_add_feed.*
@@ -21,12 +20,10 @@ class AddFeedActivity : BaseLifecycleActivity<FeedViewModel>() {
         loadToolbar()
 
         button.setOnClickListener { view ->
-
-            var feedUrl: String = "http://"
+            var feedUrl = getString(R.string.string_http)
             feedUrl = feedUrl.plus(etUrl.text.toString())
 
             viewModel.addUrl(feedUrl)
-            Toast.makeText(this, "Feed/ Url add com sucesso", Toast.LENGTH_LONG).show()
             finish()
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
@@ -53,7 +50,7 @@ class AddFeedActivity : BaseLifecycleActivity<FeedViewModel>() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
-        tvToolbarTitle.text = "Add new feed"
+        tvToolbarTitle.text = getText(R.string.string_add_new_feed)
         ivIcon.visibility = View.GONE
     }
 }

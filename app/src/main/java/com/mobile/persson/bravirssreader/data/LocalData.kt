@@ -5,11 +5,8 @@ import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.FeedItem
 import io.realm.Realm
 import io.realm.RealmResults
-import io.realm.Sort
-
 
 class LocalData {
-
     fun addUrl(url: String) {
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction {
@@ -26,12 +23,12 @@ class LocalData {
         val realm = Realm.getDefaultInstance()
         val feeds: MutableList<FeedItemEntity> = mutableListOf()
 
-        for (feedReponse in model) {
+        for (feedResponse in model) {
             val feedItem = FeedItemEntity()
-            feedItem.title = feedReponse.title
-            feedItem.description = feedReponse.description
-            feedItem.link = feedReponse.link
-            feedItem.pubDate = feedReponse.pubDate
+            feedItem.title = feedResponse.title
+            feedItem.description = feedResponse.description
+            feedItem.link = feedResponse.link
+            feedItem.pubDate = feedResponse.pubDate
             feedItem.rss = url
             feeds.add(feedItem)
         }

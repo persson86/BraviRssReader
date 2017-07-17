@@ -5,9 +5,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main2">Main2Activity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_feed_detail">FeedDetailActivity</string>
+
+    <string name="string_http">http://</string>
+    <string name="string_add_new_feed">Add new feed</string>
+    <string name="string_saved_feeds">Saved Feeds</string>
+    <string name="string_feed_detail">Feed Detail</string>
 </resources>

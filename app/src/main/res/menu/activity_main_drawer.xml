@@ -7,10 +7,10 @@
         <item
             android:id="@+id/nav_local_feed"
             android:icon="@drawable/ic_local"
-            android:title="Saved Feeds" />
+            android:title="@string/string_saved_feeds" />
         <item
             android:id="@+id/nav_add_url"
             android:icon="@drawable/ic_feed"
-            android:title="Add new Feed" />
+            android:title="@string/string_add_new_feed" />
     </group>
 </menu>
