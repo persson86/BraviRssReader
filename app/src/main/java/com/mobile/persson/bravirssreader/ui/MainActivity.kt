@@ -43,24 +43,10 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
 
         vRefresh.setOnRefreshListener(this)
 
-        val localFeeds = LocalData().getRss()
-        if (localFeeds.size > 0) {
-            val feeds: MutableList<FeedItem> = mutableListOf()
-            for (item in localFeeds) {
-                val feed = FeedItem()
-                feed.title = item.title
-                feed.description = item.description
-                feed.pubDate = item.pubDate
-                feed.rss = item.rss
-                feeds.add(feed)
-            }
-
-            adapter.addFeeds(feeds)
-        }
-
         configNavigationDrawer()
         configAdapter()
         observeLiveData()
+        showLocalData()
     }
 
     override fun onResume() {
@@ -138,6 +124,24 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         viewModel.throwableLiveData.observe(this, Observer<Throwable> {
             it?.let { Snackbar.make(rv, it.localizedMessage, Snackbar.LENGTH_LONG).show() }
         })
+    }
+
+    private fun showLocalData() {
+        val localFeeds = LocalData().getRss()
+        if (localFeeds.isNotEmpty()) {
+            val feeds: MutableList<FeedItem> = mutableListOf()
+            for (item in localFeeds) {
+                val feed = FeedItem()
+                feed.title = item.title
+                feed.description = item.description
+                feed.pubDate = item.pubDate
+                feed.link = item.link
+                feed.rss = item.rss
+                feeds.add(feed)
+            }
+
+            adapter.addFeeds(feeds)
+        }
     }
 
     private fun addUrl() {

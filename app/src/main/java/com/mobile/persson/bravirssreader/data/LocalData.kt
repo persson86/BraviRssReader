@@ -23,7 +23,9 @@ class LocalData {
 
 
     fun addFeeds(model: List<FeedItem>, url: String) {
+        val realm = Realm.getDefaultInstance()
         val feeds: MutableList<FeedItemEntity> = mutableListOf()
+
         for (feedReponse in model) {
             val feedItem = FeedItemEntity()
             feedItem.title = feedReponse.title
@@ -34,13 +36,12 @@ class LocalData {
             feeds.add(feedItem)
         }
 
-        val realm = Realm.getDefaultInstance()
         realm.beginTransaction()
-        realm.copyToRealm(feeds)
+        realm.insertOrUpdate(feeds)
         realm.commitTransaction()
     }
 
     fun getRss(): List<FeedItemEntity>
-            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll().sort("pubDate", Sort.DESCENDING)
+            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll()
 
 }
