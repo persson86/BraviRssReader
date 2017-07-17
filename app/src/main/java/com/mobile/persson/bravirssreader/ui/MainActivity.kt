@@ -41,8 +41,6 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
 
         this.title = "Saved Feeds"
 
-        Realm.init(applicationContext)
-
         vRefresh.setOnRefreshListener(this)
 
         configNavigationDrawer()

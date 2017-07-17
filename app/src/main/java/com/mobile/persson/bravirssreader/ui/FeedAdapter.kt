@@ -53,7 +53,7 @@ class FeedAdapter(context: Context) : RecyclerView.Adapter<FeedAdapter.ViewHolde
                 intent.putExtra("link", item.link)
                 context.startActivity(intent)
                 val activity = context as Activity
-                activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                activity.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }
         }
     }
