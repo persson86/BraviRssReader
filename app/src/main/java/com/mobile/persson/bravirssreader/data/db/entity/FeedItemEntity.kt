@@ -2,6 +2,7 @@ package com.mobile.persson.bravirssreader.data.db.entity
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import java.util.*
 
 open class FeedItemEntity : RealmObject() {
 
@@ -11,4 +12,5 @@ open class FeedItemEntity : RealmObject() {
     var link: String? = null
     var description: String? = null
     var rss: String? = null
+    var date: Date? = null
 }

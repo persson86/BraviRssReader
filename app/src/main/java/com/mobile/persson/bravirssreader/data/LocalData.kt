@@ -5,6 +5,9 @@ import com.mobile.persson.bravirssreader.data.db.entity.FeedUrlEntity
 import com.mobile.persson.bravirssreader.data.model.FeedItem
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.Sort
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LocalData {
     fun addUrl(url: String) {
@@ -30,6 +33,11 @@ class LocalData {
             feedItem.link = feedResponse.link
             feedItem.pubDate = feedResponse.pubDate
             feedItem.rss = url
+
+            val formatter = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH)
+            val date = formatter.parse(feedResponse.pubDate)
+            feedItem.date = date
+
             feeds.add(feedItem)
         }
 
@@ -39,6 +47,6 @@ class LocalData {
     }
 
     fun getRss(): List<FeedItemEntity>
-            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll() //TODO .sort("pubDate", Sort.DESCENDING)
+            = Realm.getDefaultInstance().where(FeedItemEntity::class.java).findAll().sort("date", Sort.DESCENDING)
 
 }
