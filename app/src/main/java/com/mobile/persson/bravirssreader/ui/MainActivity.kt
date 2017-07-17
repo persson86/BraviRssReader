@@ -118,8 +118,12 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
         viewModel.isLoadingLiveData.observe(this, Observer<Boolean> {
             it?.let { vRefresh.isRefreshing = it }
         })
+
         viewModel.feedsLiveData.observe(this, Observer<Feed> {
-            it?.let { adapter.addFeeds(it.channel?.feedItems) }
+            it?.let {
+                vRefresh.isEnabled = true
+                adapter.addFeeds(it.channel?.feedItems)
+            }
         })
         viewModel.throwableLiveData.observe(this, Observer<Throwable> {
             it?.let { Snackbar.make(rv, it.localizedMessage, Snackbar.LENGTH_LONG).show() }
@@ -129,6 +133,9 @@ class MainActivity : BaseLifecycleActivity<FeedViewModel>(), NavigationView.OnNa
     private fun showLocalData() {
         val localFeeds = LocalData().getRss()
         if (localFeeds.isNotEmpty()) {
+
+            vRefresh.isEnabled = false
+
             val feeds: MutableList<FeedItem> = mutableListOf()
             for (item in localFeeds) {
                 val feed = FeedItem()

@@ -31,6 +31,7 @@ open class FeedViewModel(application: Application?) : AndroidViewModel(applicati
 
     fun getFeed(feedUrl: String) {
         feedLiveData.value = feedUrl
+        isLoadingLiveData.value = true
     }
 
     fun addUrl(url: String) {
